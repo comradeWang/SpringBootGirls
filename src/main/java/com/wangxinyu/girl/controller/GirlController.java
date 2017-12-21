@@ -5,6 +5,7 @@ import com.wangxinyu.girl.repository.GirlRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
@@ -32,11 +33,33 @@ public class GirlController {
         girls = girlRepository.findAll();
         return girls;
     }
+
     /**
      * 新增一个女生
+     * @param age
+     * @param cup
+     * @return
      */
     @PostMapping(value = "/addGirl")
-    public String addGirl(){
-        return "s";
+    public Girl addGirl(@RequestParam("age") Integer age,@RequestParam("cup") String cup){
+        Girl girl = new Girl();
+        girl.setAge(age);
+        girl.setCup(cup);
+        return girlRepository.save(girl);
+    }
+
+    /**
+     * 更新girl但是没有成功，明天看老师怎么说
+     * @param id
+     * @param age
+     * @param cup
+     * @return
+     */
+    @PostMapping("updateGirl")
+    public Girl updateGirl(int id,Integer age,String cup){
+        Girl girl = new Girl();
+        girl.setAge(age);
+        girl.setCup(cup);
+        return girlRepository.save(girl);
     }
 }
