@@ -1,4 +1,4 @@
-package com.wangxinyu.girl;
+package com.wangxinyu.girl.entity;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
