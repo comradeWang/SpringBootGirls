@@ -1,4 +1,4 @@
-package com.wangxinyu.girl;
+package com.wangxinyu.girl.properties;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;

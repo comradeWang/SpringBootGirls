@@ -1,5 +1,6 @@
-package com.wangxinyu.girl;
+package com.wangxinyu.girl.controller;
 
+import com.wangxinyu.girl.properties.GirlProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

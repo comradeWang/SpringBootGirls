@@ -31,6 +31,14 @@ public class GirlService {
         girl2.setAge(23);
         girl2.setCup("DDDDDDD");
         girlRepository.save(girl2);
+    }
 
+    public void getGirlAge(Integer id){
+        Girl girl = girlRepository.findOne(id);
+        Integer age = girl.getAge();
+        //如果大于6小于12岁，返回小学
+        if(age>5&&age<13) {
+
+        }
     }
 }

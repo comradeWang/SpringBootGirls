@@ -3,9 +3,14 @@ package com.wangxinyu.girl.controller;
 import com.wangxinyu.girl.entity.Girl;
 import com.wangxinyu.girl.repository.GirlRepository;
 import com.wangxinyu.girl.service.GirlService;
+import com.wangxinyu.girl.entity.Response;
+import com.wangxinyu.girl.utils.ResponseUtil;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +22,10 @@ import java.util.List;
 @RestController
 public class GirlController {
 
+    /**
+     * 导入日志
+     */
+    private final static org.slf4j.Logger LOGGER = LoggerFactory.getLogger(GirlController.class);
     @Autowired
     GirlService service;
 
@@ -30,23 +39,10 @@ public class GirlController {
     */
     @GetMapping("/girls")
     public List<Girl> girlList(){
+        LOGGER.info("查询所有女生信息！");
         List<Girl> girls = new ArrayList<>();
         girls = girlRepository.findAll();
         return girls;
-    }
-
-    /**
-     * 新增一个女生
-     * @param age
-     * @param cup
-     * @return
-     */
-    @PostMapping(value = "/addGirl")
-    public Girl addGirl(@RequestParam("age") Integer age,@RequestParam("cup") String cup){
-        Girl girl = new Girl();
-        girl.setAge(age);
-        girl.setCup(cup);
-        return girlRepository.save(girl);
     }
 
     /**
@@ -54,24 +50,46 @@ public class GirlController {
      * @param id
      * @return
      */
-    @PostMapping("/findOneGirl/{id}")
+    @GetMapping("/girls/{id}")
     public Girl findOneGirl(@PathVariable("id") Integer id){
         return girlRepository.findOne(id);
     }
+    /**
+     * 新增一个女生
+     * @param girls
+     * @return
+     */
+    @PostMapping(value = "/addGirl")
+    public Response addGirl(@Valid Girl girls, BindingResult bindingResult){
+
+        Girl girl = new Girl();
+        girl.setAge(girls.getAge());
+        girl.setCup(girls.getCup());
+        girl.setTall(girls.getTall());
+        /*插入女生时，女生的最小岁数为18,不能执行插入操作，并进行信息打印*/
+        if (bindingResult.hasErrors()) {
+            Response response=ResponseUtil.error(1, bindingResult.getFieldError().getDefaultMessage());
+            return response;
+        }
+        Response response = ResponseUtil.success(girlRepository.save(girl));
+        return response;
+    }
+
 
     /**
-     * 更新girl但是没有成功，明天看老师怎么说
+     * 更新girl
      * @param id
      * @param age
      * @param cup
      * @return
      */
     @PutMapping("/updateGirl/{id}")
-    public Girl updateGirl(@PathVariable("id") int id,Integer age,String cup){
+    public Girl updateGirl(@PathVariable("id") int id,Integer age,String cup,Double tall){
         Girl girl = new Girl();
         girl.setId(id);
         girl.setAge(age);
         girl.setCup(cup);
+        girl.setTall(tall);
         return girlRepository.save(girl);
     }
 
@@ -97,5 +115,11 @@ public class GirlController {
     @PostMapping("insertTwo")
     public void insertTwo(){
         service.insertTwo();
+    }
+
+    @PostMapping("/getAge/{id}")
+    public Response getAge(Integer id){
+
+
     }
 }
